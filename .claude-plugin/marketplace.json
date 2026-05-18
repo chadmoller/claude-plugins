@@ -1,0 +1,10 @@
+{
+  "name": "my-plugins",
+  "plugins": [
+    {
+      "name": "personal-tools",
+      "source": "./personal-tools",
+      "description": "Personal productivity tools for Claude Code"
+    }
+  ]
+}
