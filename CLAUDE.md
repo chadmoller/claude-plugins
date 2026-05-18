@@ -46,4 +46,6 @@ allowed-tools: [Read, Write, Bash, ...]
 Body explains what Claude should do when this command is invoked.
 ```
 
-The `plan-branch` command (`personal-tools/commands/plan-branch.md`) is an example: it enters plan mode, creates a plan file, then derives a git branch name from the plan title and commits the plan into `plans/` on that branch.
+## Skills
+
+Skills live in `<plugin>/skills/<skill-name>/SKILL.md` and use YAML frontmatter with `name` and `description` (third-person, with specific trigger phrases). The body uses imperative form. See `personal-tools/skills/plan-branch/SKILL.md` for an example: it enters plan mode, derives a git branch name from the plan title, and commits the plan into `plans/` on that branch.

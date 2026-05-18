@@ -1,19 +1,15 @@
 ---
-description: Create a plan, create a git branch named after the plan title, and commit the plan file into the repo on that branch.
-argument-hint: <request>
-allowed-tools: [Read, Write, Edit, Glob, Grep, Bash, EnterPlanMode, ExitPlanMode, TaskCreate, TaskUpdate, AskUserQuestion, Agent]
+name: plan-branch
+description: This skill should be used when the user asks to "plan a branch", "create a plan and branch", "plan this feature", "draft a plan and commit it", or wants to create a development plan that automatically becomes a git branch with the plan committed into the repo.
 ---
 
 # Plan Branch
 
-Create a development plan, then automatically create a git branch named after
-the plan and commit the plan file into the repository on that branch.
+Create a development plan, then automatically create a git branch named after the plan and commit the plan file into the repository on that branch.
 
 ## Workflow
 
 ### Phase 1: Plan Creation
-
-Follow the standard plan mode workflow:
 
 1. Call EnterPlanMode to enter plan mode
 2. Explore the codebase as needed to understand the task
