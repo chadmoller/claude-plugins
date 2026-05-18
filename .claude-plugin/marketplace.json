@@ -1,5 +1,8 @@
 {
   "name": "my-plugins",
+  "owner": {
+    "name": "chad"
+  },
   "plugins": [
     {
       "name": "personal-tools",
