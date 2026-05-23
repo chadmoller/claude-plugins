@@ -1,5 +1,6 @@
 ---
 name: plan-branch
+version: 1.0.0
 description: This skill should be used when the user asks to "plan a branch", "create a plan and branch", "plan this feature", "draft a plan and commit it", or wants to create a development plan that automatically becomes a git branch with the plan committed into the repo.
 ---
 

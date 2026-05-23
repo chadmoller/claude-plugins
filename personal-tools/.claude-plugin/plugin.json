@@ -1,4 +1,5 @@
 {
   "name": "personal-tools",
+  "version": "1.0.0",
   "description": "Personal productivity tools for Claude Code"
 }
