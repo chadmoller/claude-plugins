@@ -1,0 +1,5 @@
+{
+  "name": "parallel-dev",
+  "version": "1.0.0",
+  "description": "Multi-agent parallel development with worktree isolation and sequential merging across JVM, web, Android, infrastructure, build, and data domains"
+}
