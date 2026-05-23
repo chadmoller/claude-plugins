@@ -9,6 +9,11 @@
       "name": "personal-tools",
       "source": "./personal-tools",
       "description": "Personal productivity tools for Claude Code"
+    },
+    {
+      "name": "parallel-dev",
+      "source": "./parallel-dev",
+      "description": "Multi-agent parallel development with worktree isolation and sequential merging across JVM, web, Android, infrastructure, build, and data domains"
     }
   ]
 }
