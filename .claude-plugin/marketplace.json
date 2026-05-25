@@ -13,7 +13,7 @@
     {
       "name": "parallel-dev",
       "source": "./parallel-dev",
-      "description": "Multi-agent parallel development with worktree isolation and sequential merging across JVM, web, Android, infrastructure, build, and data domains"
+      "description": "Multi-agent parallel development with worktree isolation and sequential merging across JVM, web, Android, infrastructure, build, and data domains. Automatically pushes the feature branch, opens a PR, monitors CI, fixes failures, and merges to main on success."
     }
   ]
 }
