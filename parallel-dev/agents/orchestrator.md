@@ -128,19 +128,25 @@ Poll task status using TaskList and TaskGet until all tasks reach a terminal sta
 You are on the feature branch. For each domain in the planner's merge order:
 
 1. Check if the task completed successfully. If it failed, log a warning and skip it.
-2. Merge the worker's branch into the feature branch:
+2. **Before each merge, ensure you are in the project root** (worker tasks may have changed the CWD via EnterWorktree):
+   ```
+   cd <project_root>
+   ```
+3. Merge the worker's branch into the feature branch:
    ```
    git merge --no-ff <feature-branch>-<domain> -m "Merge <domain> work: <feature-branch>"
    ```
-3. If the merge has conflicts:
+4. If the merge has conflicts:
    a. Examine both sides with `git diff`
    b. Resolve conflicts by applying the logically correct combination of both changes
    c. `git add` resolved files and `git merge --continue`
    d. If the conflict is too complex to resolve automatically, pause and ask the user
-4. Remove the worktree: `git worktree remove <worktree_base>/<domain> --force`
-5. Delete the worker branch: `git branch -d <feature-branch>-<domain>`
+5. Remove the worktree: `git worktree remove <worktree_base>/<domain> --force`
+6. Delete the worker branch: `git branch -d <feature-branch>-<domain>`
 
 ## Phase 6: Code Review
+
+Return to the project root before running the review: `cd <project_root>`
 
 Invoke the **code-reviewer** agent using the Agent tool with:
 - A summary of what each worker implemented
