@@ -1,5 +1,5 @@
 ---
-description: Run a development task across multiple domains in parallel using isolated git worktrees. Each domain (JVM, web, Android, infrastructure, build, data) runs concurrently and results are merged sequentially.
+description: Run a development task across multiple domains in parallel using isolated git worktrees. Each domain (JVM, web, Android, infrastructure, build, data) runs concurrently and results are merged sequentially. Then pushes the branch, opens a PR, monitors CI, fixes failures, and merges to main on success.
 argument-hint: <task description>
 allowed-tools: [Read, Write, Edit, Bash, Glob, Grep, TaskCreate, TaskGet, TaskList, TaskStop, Agent, AskUserQuestion, EnterPlanMode, ExitPlanMode, EnterWorktree, ExitWorktree, WebFetch, mcp__plugin_github_github__create_pull_request, mcp__plugin_github_github__pull_request_read, mcp__plugin_github_github__merge_pull_request, mcp__plugin_github_github__list_pull_requests]
 ---
