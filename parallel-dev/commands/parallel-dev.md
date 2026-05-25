@@ -1,7 +1,7 @@
 ---
 description: Run a development task across multiple domains in parallel using isolated git worktrees. Each domain (JVM, web, Android, infrastructure, build, data) runs concurrently and results are merged sequentially.
 argument-hint: <task description>
-allowed-tools: [Read, Write, Edit, Bash, Glob, Grep, TaskCreate, TaskGet, TaskList, TaskStop, Agent, EnterPlanMode, ExitPlanMode, EnterWorktree, ExitWorktree]
+allowed-tools: [Read, Write, Edit, Bash, Glob, Grep, TaskCreate, TaskGet, TaskList, TaskStop, Agent, AskUserQuestion, EnterPlanMode, ExitPlanMode, EnterWorktree, ExitWorktree, WebFetch, mcp__plugin_github_github__create_pull_request, mcp__plugin_github_github__pull_request_read, mcp__plugin_github_github__merge_pull_request, mcp__plugin_github_github__list_pull_requests]
 ---
 
 # Parallel Dev
@@ -104,3 +104,71 @@ Invoke the **orchestrator** agent using the Agent tool, passing:
 - The list of active agents
 
 The orchestrator will spawn domain workers in parallel, merge results sequentially, run a code review, and produce a final report.
+
+---
+
+## Phase 8: Push, PR, Pipeline & Merge
+
+### 8a. Push the feature branch
+
+Push the feature branch to origin:
+
+```
+git push -u origin <branch-name>
+```
+
+### 8b. Open a Pull Request
+
+Create a PR using the `mcp__plugin_github_github__create_pull_request` tool:
+- **head**: the feature branch name
+- **base**: `main`
+- **title**: the plan title (from the `# ` heading in the plan file)
+- **body**: a brief summary of what was implemented (from the orchestrator's final report)
+
+Display the PR URL to the user.
+
+### 8c. Ask the user whether to manage the PR
+
+Use `AskUserQuestion` to ask:
+
+> "A PR has been opened at <PR URL>. Would you like me to monitor the CI pipeline and automatically merge it on success? (yes/no)"
+
+**If the user says no:**
+- Inform them: "The PR is open at <PR URL>. You are responsible for reviewing, managing the pipeline, and merging it when ready."
+- Stop here. The workflow is complete.
+
+**If the user says yes:** continue to Phase 8d.
+
+### 8d. Monitor the CI pipeline
+
+Poll the PR status using `mcp__plugin_github_github__pull_request_read` on a loop:
+- Wait ~30 seconds between polls: `sleep 30`
+- Check the PR's merge status and any reported check/status fields
+- Keep the user informed of progress (e.g., "Pipeline running... checks pending")
+
+**Determining check outcomes:**
+- If `pull_request_read` returns check run details, use those directly
+- If only a URL is available, use `WebFetch` to retrieve the check run page and parse the outcome
+- Treat "success", "neutral", or no failing checks as a passing pipeline
+- Treat any "failure" or "error" conclusion as a failing pipeline
+
+**If the pipeline fails:**
+1. Report the failure to the user with as much detail as available (failing check name, error output)
+2. Attempt to fix the failure:
+   - Read the relevant source files
+   - Apply the minimal fix needed to address the CI error
+   - `git add -A && git commit -m "Fix CI: <brief description of fix>"`
+   - `git push`
+3. Return to the polling loop (Phase 8d) to monitor again
+
+**If the pipeline passes:** continue to Phase 8e.
+
+### 8e. Merge the PR and update local main
+
+1. Merge the PR using `mcp__plugin_github_github__merge_pull_request` with merge method `squash` (or `merge` if the project has no squash preference — use `merge` as the default).
+2. Switch to main and pull the merged changes locally:
+   ```
+   git checkout main
+   git pull origin main
+   ```
+3. Inform the user: "Pipeline passed. PR merged and main is up to date."
