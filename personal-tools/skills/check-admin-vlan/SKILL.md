@@ -29,6 +29,8 @@ local machine is currently on the Admin VLAN. The K8s API server is only reachab
 
 ## Notes
 
-- The Admin VLAN provides access to the K8s API at 192.168.130.10:6443.
-- `ip addr` is always safe to run — it's read-only and needs no special permissions.
+- `ip addr` is always safe to run — it's read-only, local, and instant. Use it instead of
+  probing kubectl with a timeout.
+- If kubectl returns `connection refused` despite an Admin VLAN IP, the API server itself may
+  be down — investigate cluster health rather than asking to switch networks.
 - Run this check at the start of any task that will need kubectl, not after a failure.
