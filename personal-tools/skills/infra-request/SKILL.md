@@ -10,20 +10,20 @@ are **not** made from other projects. File a request issue instead. The user cle
 requests by hand in a mollermalt-infra session. Nothing processes them automatically,
 so don't wait on one. Say it's filed and keep going, or stop if the work is blocked.
 
-All commands use the `tea` CLI with the `taproom` login. Always pass
-`--login taproom --repo chad/mollermalt-infra` explicitly.
+All commands use the `tea` CLI with the `taproom_issues` login. Always pass
+`--login taproom_issues --repo chad/mollermalt-infra` explicitly.
 
 ## 1. Check for an existing request
 
 ```bash
-tea issues list --login taproom --repo chad/mollermalt-infra --labels request --state open \
+tea issues list --login taproom_issues --repo chad/mollermalt-infra --labels request --state open \
   --fields index,title,labels,url
 ```
 
 If one already covers the need, add context with a comment instead of filing a duplicate:
 
 ```bash
-tea comment --login taproom --repo chad/mollermalt-infra <index> "<extra context>"
+tea comment --login taproom_issues --repo chad/mollermalt-infra <index> "<extra context>"
 ```
 
 ## 2. Make sure the source label exists
@@ -31,8 +31,8 @@ tea comment --login taproom --repo chad/mollermalt-infra <index> "<extra context
 The source label is `from/<project>`, where `<project>` is the current repo name (e.g. `from/cwest`).
 
 ```bash
-tea labels list --login taproom --repo chad/mollermalt-infra -o simple | grep -q "from/<project>" || \
-  tea labels create --login taproom --repo chad/mollermalt-infra \
+tea labels list --login taproom_issues --repo chad/mollermalt-infra -o simple | grep -q "from/<project>" || \
+  tea labels create --login taproom_issues --repo chad/mollermalt-infra \
     --name "from/<project>" --color "#5319e7" --description "Requested by chad/<project>"
 ```
 
@@ -50,7 +50,7 @@ won't have this project's context. Include:
 - **Urgency:** Blocking / Soon / Whenever
 
 ```bash
-tea issues create --login taproom --repo chad/mollermalt-infra \
+tea issues create --login taproom_issues --repo chad/mollermalt-infra \
   --title "[request] <short summary>" \
   --labels "request,from/<project>" \
   --description "$(cat <body-file>)"
@@ -62,9 +62,9 @@ OpenSpec task, etc.), note there that it waits on that infra request URL.
 ## Checking status later
 
 ```bash
-tea issues list --login taproom --repo chad/mollermalt-infra --labels "from/<project>" --state all \
+tea issues list --login taproom_issues --repo chad/mollermalt-infra --labels "from/<project>" --state all \
   --fields index,title,state,labels,url
-tea issues --login taproom --repo chad/mollermalt-infra <index> --comments
+tea issues --login taproom_issues --repo chad/mollermalt-infra <index> --comments
 ```
 
 A request with the `needs-info` label has a question waiting in its comments. Answer it
@@ -73,6 +73,10 @@ how to use it.
 
 ## If tea isn't logged in
 
-`tea logins list` should show `taproom`. If it doesn't, ask the user to set it up. The steps are in
+`tea logins list` should show `taproom_issues`. If it doesn't, ask the user to set it up. The steps are in
 mollermalt-infra `kubernetes/apps/gitea/manual-config.md`, "Phase 6 — Infra request pipeline".
 Never create tokens yourself.
+
+If tea fails with `huh: could not open a new TTY`, the login has `ssh_key:` set and tea is
+asking for the key's passphrase. Ask the user to clear it (Phase 6, Step 2 gotcha).
+Don't work around it.
